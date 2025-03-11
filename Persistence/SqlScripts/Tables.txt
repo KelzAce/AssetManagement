@@ -1,0 +1,45 @@
+﻿USE [AssetManagement];
+GO
+
+SET ANSI_NULLS ON;
+GO
+
+SET QUOTED_IDENTIFIER ON;
+GO
+
+-- Drop table if it already exists
+IF OBJECT_ID('Users', 'U') IS NOT NULL
+    DROP TABLE Users;
+GO
+
+-- Create the Users table with UNIQUEIDENTIFIER as the primary key
+CREATE TABLE Users (
+    [Id] UNIQUEIDENTIFIER NOT NULL DEFAULT NEWID(), -- Generate GUID by default
+    [FirstName] NVARCHAR(50) NOT NULL,
+    [LastName] NVARCHAR(50) NOT NULL,
+    [Email] NVARCHAR(50) UNIQUE NOT NULL,
+    [Phone] NVARCHAR(50) NOT NULL,
+    [NIN] NVARCHAR(50) UNIQUE NOT NULL,
+    [BusinessInformation] SMALLINT NOT NULL CHECK (BusinessInformation BETWEEN 1 AND 6), -- Enum stored as SMALLINT with constraint
+    [Password] NVARCHAR(255) NOT NULL,
+    [CreatedAt] DATETIME2 DEFAULT GETDATE(),
+    [LastUpdatedAt] DATETIME2 DEFAULT GETDATE(),
+    CONSTRAINT PK_Users PRIMARY KEY (Id) -- Primary Key Constraint
+);
+GO
+
+-- Create a trigger to update LastUpdatedAt automatically
+CREATE TRIGGER trg_UpdateLastUpdatedAt
+ON Users
+AFTER UPDATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE Users
+    SET LastUpdatedAt = GETDATE()
+    FROM Users u
+    INNER JOIN inserted i ON u.Id = i.Id;
+END;
+GO
+
+---------------------------------------------------------------------------------------------------

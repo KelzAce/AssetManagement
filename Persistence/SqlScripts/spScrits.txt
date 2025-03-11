@@ -1,0 +1,50 @@
+﻿USE [AssetManagement]
+GO
+
+/****** Object:  StoredProcedure [dbo].[sp_UserSignUp]    Script Date: 07/03/2025 11:17:49 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+-- Create the SignUp stored procedure
+CREATE PROCEDURE [dbo].[sp_UserSignUp]
+    @FirstName NVARCHAR(50),
+    @LastName NVARCHAR(50),
+    @Email NVARCHAR(50),
+    @Phone NVARCHAR(50),
+    @NIN NVARCHAR(50),
+    @BusinessInformation SMALLINT, -- Enum stored as SMALLINT
+    @Password NVARCHAR(255) -- Plain text password (should be hashed)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Check if the email already exists
+    IF EXISTS (SELECT 1 FROM Users WHERE Email = @Email)
+    BEGIN
+        PRINT 'Error: Email already exists.';
+        RETURN -1; -- Email already exists
+    END
+
+    -- Insert new user with GUID Id
+    INSERT INTO Users (Id, FirstName, LastName, Email, Phone, NIN, BusinessInformation, Password, CreatedAt, LastUpdatedAt)
+    VALUES (NEWID(), @FirstName, @LastName, @Email, @Phone, @NIN, @BusinessInformation,
+            CONVERT(NVARCHAR(255), HASHBYTES('SHA2_256', @Password), 2), -- Securely hash password
+            GETDATE(), GETDATE());
+
+    -- Check if insertion was successful
+    IF @@ROWCOUNT = 0
+    BEGIN
+        PRINT 'Error: Insert failed.';
+        RETURN -2; -- Insertion failed
+    END
+
+    PRINT 'Success: User registered successfully.';
+    RETURN 1; -- Success
+END;
+GO
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
