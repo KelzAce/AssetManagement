@@ -11,8 +11,8 @@ namespace Domain.Models
     {
         public int Id { get; set; }
         public required string ProposalName { get; set; }
-        public Contract Contract {  get; set; }
-        public MinistryName Ministry {get; set; }
+        public required string Contract {  get; set; }
+        public required string Ministry {get; set; }
         public required string proposalDoc {get; set; }
         public ProposalStatus proposalStatus { get; set; }
         public DateTime DateSubmitted { get; set; }

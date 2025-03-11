@@ -13,9 +13,9 @@ namespace Persistence.Repositories
     public class UserRepository
     {
         private readonly IDbConnection _dapperContext;
-        public UserRepository(DapperDbContext dapperDbContect)
+        public UserRepository(DapperDbContext dapperDbContext)
         {
-            _dapperContext = dapperDbContect.CreateConnection();
+            _dapperContext = dapperDbContext.CreateConnection();
         }
 
         public async Task<User> AddUserAsync(User user)

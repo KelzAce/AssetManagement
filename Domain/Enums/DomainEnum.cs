@@ -42,14 +42,6 @@ namespace Domain.Enums
             FullPayment
         }
 
-        public enum MinistryName
-        {
-            Power,
-            Labour,
-            Works,
-            HumanResources
-        }
-
         public enum BusinessInformation
         {
             BusinessName,
@@ -59,7 +51,6 @@ namespace Domain.Enums
             StaffSize,
             BusinessInfo
         }
-
         public enum LicenseStatus
         {
             Active,

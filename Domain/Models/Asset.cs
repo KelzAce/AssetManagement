@@ -11,13 +11,13 @@ namespace Domain.Models
     public class Asset
     {
         public string Id { get; set; } //Change to Guid
-        public string AssetName { get; set; }
-        public string Contract {  get; set; }
-        public string Address { get; set; }
-        public string Quantity {get; set; }
-        public string ContractType { get; set; }
-        public StatusReport StatusReport { get; set; } = StatusReport.Assigned;
+        public required string AssetName { get; set; }
+        public required string Project {  get; set; }
+        public required string ProjectType { get; set; }
+        public required string Ministry { get; set; }
+        public required string Doc { get; set; }
         public DateTime DateUploaded { get; set; }
+        public required string AssetStatus { get; set; } 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
